@@ -3,11 +3,10 @@ version: 0.2
 phases:
   install:
     commands:
-      # Install AWS CLI and Docker if not already available
+      # Install Docker if it's not pre-installed (but CodeBuild typically has Docker installed by default)
       - echo Installing Docker...
       - yum install -y docker
-      - service docker start
-      - yum install -y aws-cli
+      - docker --version  # Check if Docker is available
 
   pre_build:
     commands:
