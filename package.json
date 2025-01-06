@@ -1,33 +1,11 @@
-version: 0.2
-
-phases:
-  install:
-    commands:
-      # Install AWS CLI and Docker if not already available
-      - echo Installing Docker...
-      - yum install -y docker
-      - service docker start
-      - yum install -y aws-cli
-
-  pre_build:
-    commands:
-      - echo Logging into Amazon ECR...
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
-      - echo $REPOSITORY_URI
-
-  build:
-    commands:
-      - echo Building the Docker image...
-      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG
-
-  post_build:
-    commands:
-      - echo Pushing the Docker image to Amazon ECR...
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo Docker image pushed to ECR successfully.
-
-artifacts:
-  files:
-    - '**/*'
+{
+  "name": "simple-node-app",
+  "version": "1.0.0",
+  "description": "A simple Node.js app for testing with Docker",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Your Name",
+  "license": "ISC"
+}
