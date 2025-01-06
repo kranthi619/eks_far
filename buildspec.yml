@@ -15,11 +15,13 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
-      - IMAGE_TAG=${IMAGE_TAG:-latest} # Set default tag if empty
-      - echo "Repository URI: $REPOSITORY_URI"
-      - echo "Image Tag: $IMAGE_TAG"
+      - echo "AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID"
+      - echo "AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION"
+      - echo "REPOSITORY_URI: $REPOSITORY_URI"
+      - echo "IMAGE_TAG: $IMAGE_TAG"
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
+      - echo "Docker login succeeded"
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG
 
   build:
     commands:
